@@ -11,26 +11,38 @@ function writeLogoFile(fileName, userInput) {
     //file string starts empty
     let fileString = ''
     //SVG file set up, might need to be formatted in backticks?
-    fileString = '<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">'
-    fileString += `${userInput.shape}`
+    // fileString = '<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">'
+    // fileString += `${userInput.shape}`
 
     //this adds the shape
     let userShape;
     if(userInput.shape === "Triangle") {
         userChoice = new Triangle()
-        fileString += `<polygon points="150, 18 244, 182 56, 182" fill="${userInput.shapeColor}"/>`
+        // fileString += `<polygon points="150, 18 244, 182 56, 182" fill="${userInput.shapeColor}"/>`
     } else if(userInput.shape === "Square") {
         userChoice = new Square()
-        fileString += `<rect x="75" y="40" width="150" height="150" fill="${userInput.shapeColor}"/>`;
+        // fileString += `<rect x="75" y="40" width="150" height="150" fill="${userInput.shapeColor}"/>`;
     } else {
         userShape = new Circle()
-        fileString += `<circle cx="150" cy="120" r="75" fill="${userInput.shapeColor}"/>`
+        // fileString += `<circle cx="150" cy="120" r="75" fill="${userInput.shapeColor}"/>`
     }
-
+    //trying to actually use the object
+    userShape.setColor(userInput.shapeColor)
     //add users text, it should be in the bottom right, will fix
-    fileString += `<text x="0" y="0" font-size="50" fill="${userInput.textColor}">${userInput.text}</text>`
+    // fileString += `<text x="0" y="0" font-size="50" fill="${userInput.textColor}">${userInput.text}</text>`
     //closing tag
-    fileString += '</svg>'
+    // fileString += '</svg>'
+    //really trying to use the object
+    fileString = 
+    `<svg   version="1.1" 
+            width="300" 
+            height="200" 
+            xmlns="http://www.w3.org/2000/svg">
+
+            ${userShape.render()}
+            <text x="0" y="0" font-size="50" fill="${userInput.textColor}">${userInput.text}</text>
+
+    </svg>`
 
     fs.writeFile(fileName, fileString, (err) => {
         err ? console.log(err) : console.log("Generated logo.svg");
@@ -70,7 +82,7 @@ function getUserInput() {
         .then((answers) => {
             if(answers.text.length > 3) {
                 console.log("The text you entered was greated than 3 characters")
-                promptUser()
+                getUserInput()
             } else
             writeLogoFile("logo.svg", answers)
         })
